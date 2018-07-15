@@ -11,3 +11,8 @@ body {
 #title {
   text-align: center;
 }
+
+#title h1, #title h2, #title p {
+  margin: 0;
+  padding-top: 10px;
+}

@@ -27,12 +27,10 @@
         .domain([minYear, maxYear])
         .range([padding, w - padding]);
 
-    const minTime = d3.min(data, (d) => d.timeObj);
-    const maxTime = d3.max(data, (d) => d.timeObj);
     const yScale =
      d3.scaleTime()
-       .domain([maxTime, minTime])
-       .range([h - padding, padding]);
+       .domain(d3.extent(data, (d) => d.timeObj))
+       .range([padding, h - padding]);
 
     // create canvas div for svg and tooltip
     d3.select('body')
@@ -55,7 +53,12 @@
       .attr('class', 'dot')
       .attr('cx', (data) => xScale(data.Year))
       .attr('cy',(data) => yScale(data.timeObj))
-      .attr('r', () => 5);
+      .attr('data-xvalue', (data) => data.Year)
+      .attr('data-yvalue', (data) => data.timeObj)
+      .attr('fill', (data) => {
+        return data.Doping === '' ?  '#00e64d' : '#e62e00';
+      })
+      .attr('r', () => 8);
 
     // add axis to svg canvas
     const xAxis = d3.axisBottom(xScale).tickFormat(d3.format('d'));
