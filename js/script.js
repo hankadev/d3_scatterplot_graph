@@ -4,32 +4,34 @@
 
   const url = 'https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json';
   d3.json(url).then((data) => {
-    console.log(data);
     const w = 900;
     const h = 600;
     const padding = 50;
 
-    let date = [];
-    let time = [];
     for(let i = 0; i < data.length; i++) {
-      date.push(data[i].Year);
       let temp = data[i].Time.split(':');
       let timeObj = new Date();
       timeObj.setHours(0);
       timeObj.setMinutes(temp[0]);
       timeObj.setSeconds(temp[1]);
-      time.push(timeObj);
+      data[i].timeObj = timeObj;
     }
 
+    console.log(data);
+
     // scale the data for the axes
+    const minYear = d3.min(data, (d) => d.Year) - 1;
+    const maxYear = d3.max(data, (d) => d.Year) + 1;
     const xScale =
       d3.scaleLinear()
-        .domain([d3.min(date) - 1, d3.max(date) + 1])
+        .domain([minYear, maxYear])
         .range([padding, w - padding]);
 
+    const minTime = d3.min(data, (d) => d.timeObj);
+    const maxTime = d3.max(data, (d) => d.timeObj);
     const yScale =
      d3.scaleTime()
-       .domain([d3.max(time) - 10, d3.min(time)])
+       .domain([maxTime, minTime])
        .range([h - padding, padding]);
 
     // create canvas div for svg and tooltip
@@ -44,6 +46,16 @@
         .append('svg')
         .attr('width', w)
         .attr('height', h);
+
+    // add circles to the graph
+    svg.selectAll('circle')
+      .data(data)
+      .enter()
+      .append('circle')
+      .attr('class', 'dot')
+      .attr('cx', (data) => xScale(data.Year))
+      .attr('cy',(data) => yScale(data.timeObj))
+      .attr('r', () => 5);
 
     // add axis to svg canvas
     const xAxis = d3.axisBottom(xScale).tickFormat(d3.format('d'));
