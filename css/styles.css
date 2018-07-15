@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+:root {
+  --bg-color: #ccc;
+  --bg-white: #eee;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -6,6 +12,8 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  background-color: var(--bg-color);
+  font-family: 'Open Sans', sans-serif;
 }
 
 #title {
@@ -15,4 +23,9 @@ body {
 #title h1, #title h2, #title p {
   margin: 0;
   padding-top: 10px;
+}
+
+svg {
+  margin-top: 10px;
+  background-color: var(--bg-white);
 }
