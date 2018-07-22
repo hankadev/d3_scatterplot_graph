@@ -17,8 +17,6 @@
       data[i].timeObj = timeObj;
     }
 
-    console.log(data);
-
     // scale the data for the axes
     const minYear = d3.min(data, (d) => d.Year) - 1;
     const maxYear = d3.max(data, (d) => d.Year) + 1;
