@@ -27,9 +27,11 @@
         .domain([minYear, maxYear])
         .range([padding, w - padding]);
 
+    const minTime = d3.min(data, (d) => d.timeObj);
+    const maxTime = d3.max(data, (d) => d.timeObj);
     const yScale =
      d3.scaleTime()
-       .domain(d3.extent(data, (d) => d.timeObj))
+       .domain([minTime, maxTime])
        .range([padding, h - padding]);
 
     // create canvas div for svg and tooltip
@@ -72,5 +74,38 @@
       .attr('id', 'y-axis')
       .attr('transform', 'translate(' + padding + ',0)')
       .call(yAxis);
+
+    // add legend
+    svg.append('text')
+      .attr('id', 'legend')
+      .attr('x', 850)
+      .attr('y', 150)
+      .style('text-anchor', 'end')
+      .text('Doping Allegations');
+    svg.append('rect')
+      .attr('width', 20)
+      .attr('height', 20)
+      .attr('x', 770)
+      .attr('y', 160)
+      .attr('fill', '#e62e00');
+    svg.append('text')
+      .attr('x', 800)
+      .attr('y', 175)
+      .attr('id', 'yes')
+      .style('text-anchor', 'start')
+      .text('Yes');
+    svg.append('rect')
+      .attr('width', 20)
+      .attr('height', 20)
+      .attr('x', 770)
+      .attr('y', 185)
+      .attr('fill', '#00e64d');
+    svg.append('text')
+      .attr('x',800)
+      .attr('y', 200)
+      .attr('id', 'no')
+      .style('text-anchor', 'start')
+      .text('No');
+
   });
 }());
