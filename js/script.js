@@ -47,6 +47,12 @@
         .attr('width', w)
         .attr('height', h);
 
+      // add tooltip div
+    const tooltip =
+      d3.select('#canvas')
+        .append('div')
+        .attr('id', 'tooltip');
+
     // add circles to the graph
     svg.selectAll('circle')
       .data(data)
@@ -60,7 +66,30 @@
       .attr('fill', (data) => {
         return data.Doping === '' ?  '#00e64d' : '#e62e00';
       })
-      .attr('r', () => 8);
+      .attr('r', () => 8)
+      .on('mouseover', (data) => {
+        tooltip.attr('data-year', data.Year)
+          .html(showTooltip(data))
+          .style('top',(d3.event.pageY - 30) + 'px')
+          .style('left', (d3.event.pageX + 15) + 'px')
+          .style('visibility', 'visible');
+      })
+      .on('mouseout', () => {
+        tooltip.style('visibility', 'hidden');
+      });
+
+    function showTooltip(data) {
+      let resultString = data.Name + ' (' + data.Nationality + ')';
+      resultString += '<br>';
+      resultString += 'Time: ' + data.Time;
+      resultString += '<br>';
+      resultString += 'Year: ' + data.Year;
+      if (data.Doping !== '') {
+        resultString += '<br>';
+        resultString += data.Doping;
+      }
+      return resultString;
+    }
 
     // add axis to svg canvas
     const xAxis = d3.axisBottom(xScale).tickFormat(d3.format('d'));
